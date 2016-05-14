@@ -15,5 +15,9 @@ public class House {
 	public int getWinnings() {
 		return winnings;
 	}
+	
+	public void setWinnings(int winnings) {
+		this.winnings = winnings;
+	}
 
 }
