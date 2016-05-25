@@ -11,10 +11,10 @@ public class Blackjack {
 	private ArrayList<Player> players;
 	private ArrayList<Card> shoe = new ArrayList<Card>();
 	
-	public Blackjack(House house, ArrayList<Player> players) {
+	public Blackjack(House house, ArrayList<Player> players, int numDecks) {
 		this.house = house;
 		this.players = new ArrayList<Player>(players);
-		//setUpShoe(4);
+		setUpShoe(numDecks);
 	}
 	
 	public ArrayList<Card> getShoe() {
@@ -61,7 +61,6 @@ public class Blackjack {
 	public void setUpShoe(int numDecks) {
 		ArrayList<Card> decks = new ArrayList<Card>();
 		Random rand = new Random();
-		System.out.println("NumDecks: " + numDecks);
 		for(int i = 0; i < numDecks; i++) {
 			try{
 				decks.addAll(readInDeck());
@@ -69,14 +68,9 @@ public class Blackjack {
 				System.err.println("File not found");
 			}
 		}
-		int i = 0;
-		System.out.println("Deck Size: " + decks.size());
 		while(decks.size() != 0) {
 			int index = rand.nextInt(decks.size());
-			System.out.println(decks.size());
-			//System.out.println(index);
 			shoe.add(decks.remove(index));
-			//System.out.println(i++);
 		}
 	}
 }
