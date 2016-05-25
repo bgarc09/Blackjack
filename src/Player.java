@@ -16,11 +16,6 @@ public class Player {
 		return money;
 	}
 	
-	/**
-	 * Deals the player another card and determines if the players busts with said card
-	 * @param card Card to be dealt to the player
-	 * @return true if the player busts; false otherwise
-	 */
 	public boolean hit(Card card) {
 		cards.getCards().add(card);
 		if(cards.cardTotal() > 21) {
