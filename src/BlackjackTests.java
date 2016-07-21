@@ -10,17 +10,130 @@ public class BlackjackTests {
 	private ArrayList<Player> players;
 	private Blackjack blackjack;
 
-	private void setUp(int numPlayers, int numDecks) {
-		house = new House();
-		ArrayList<Player> players = new ArrayList<Player>();
-		for(int i = 0; i < numPlayers; i++) {
-			players.add(new Player(500));
-		}
-		blackjack = new Blackjack(house, players, numDecks);
+	@Test
+	public void bustTest1() {
+		setUp(3, 4);
+		Card a = new Card("Spade", "King", 10);
+		Card b = new Card("Spade", "Queen", 10);
+		CardHand hand = new CardHand(a, b);
+		assertFalse(blackjack.bust(hand));
+		Card c = new Card("Heart", "Jack", 10);
+		hand.getCards().add(c);
+		assertTrue(blackjack.bust(hand));
 	}
 	
 	@Test
-	public void testSetUpShoe1Deck() {
+	public void bustTest2() {
+		setUp(3, 4);
+		Card a = new Card("Spade", "Ace", 1);
+		Card b = new Card("Spade", "Five", 5);
+		CardHand hand = new CardHand(a, b);
+		assertFalse(blackjack.bust(hand));
+		Card c = new Card("Heart", "Jack", 10);
+		hand.getCards().add(c);
+		assertFalse(blackjack.bust(hand));
+		Card d = new Card("Diamond", "Eight", 8);
+		hand.getCards().add(d);
+		assertTrue(blackjack.bust(hand));
+	}
+	
+	@Test
+	public void dealTest() {
+		setUp(3, 4);
+		assertEquals(blackjack.getShoe().size(), 208);
+		blackjack.deal();
+		assertEquals(blackjack.getShoe().size(), 200);
+		players.size();
+		for(int i = 0; i < players.size(); i++) {
+			assertFalse(blackjack.getShoe().contains(players.get(i).getHand(0).getCards()));
+		}
+		assertFalse(blackjack.getShoe().contains(house.getHidden()));
+		assertFalse(blackjack.getShoe().contains(house.getUpCards()));
+
+	}
+	
+	/**
+	 * Regular hand
+	 */
+	@Test
+	public void handTotalTest1() {
+		Card a = new Card("Spade", "Ten", 10);
+		Card b = new Card("Spade", "Five", 5);
+		CardHand hand = new CardHand(a, b);
+		assertEquals(hand.handTotal(), 15);
+	}
+	
+	/**
+	 * Face Card
+	 */
+	@Test
+	public void handTotalTest2() {
+		Card a = new Card("Spade", "King", 10);
+		Card b = new Card("Spade", "Queen", 10);
+		CardHand hand = new CardHand(a, b);
+		assertEquals(hand.handTotal(), 20);
+	}
+	
+	/**
+	 * Ace and regular card
+	 */
+	@Test
+	public void handTotalTest3() {
+		Card a = new Card("Spade", "Ten", 10);
+		Card b = new Card("Spade", "Ace", 1);
+		CardHand hand = new CardHand(a, b);
+		assertEquals(hand.handTotal(), 21);
+	}
+	
+	/**
+	 * Two Aces 
+	 */
+	@Test
+	public void handTotalTest4() {
+		Card a = new Card("Spade", "Ace", 1);
+		Card b = new Card("Diamond", "Ace", 1);
+		CardHand hand = new CardHand(a, b);
+		assertEquals(hand.handTotal(), 12);
+	}
+	
+	/**
+	 * Over 21 with soft ace
+	 */
+	@Test
+	public void handTotalTest5() {
+		Card a = new Card("Spade", "Four", 4);
+		Card b = new Card("Diamond", "Ace", 1);
+		CardHand hand = new CardHand(a, b);
+		assertEquals(hand.handTotal(), 15);
+		Card c = new Card("Heart", "Jack", 10);
+		assertEquals(hand.handTotal(), 15);
+	}
+	
+	@Test
+	public void hitTest() {
+		setUp(3, 4);
+	}
+	
+	@Test
+	public void initiateRoundTest() {
+		setUp(3, 4);
+		blackjack.playRound(50);
+		for(int i = 0; i < blackjack.getPlayers().size(); i++) {
+			assertEquals(blackjack.getPlayers().get(i).getMoney(), 450);
+			assertEquals(blackjack.getPlayers().get(i).getHand(0).getCards().size(), 2);
+			assertFalse(blackjack.getShoe().contains(blackjack.getPlayers().get(i).getHand(0).getCards()));
+		}
+		assertEquals(blackjack.getHouse().getWinnings(), 150);
+		assertFalse(blackjack.getShoe().contains(blackjack.getHouse().getHidden()));
+		assertFalse(blackjack.getShoe().contains(blackjack.getHouse().getUpCards()));
+		
+	}
+	
+	/**
+	 * One Deck
+	 */
+	@Test
+	public void setUpShoeTest1() {
 		setUp(3, 1);
 		int[] spades = new int[13];
 		int[] hearts = new int[13];
@@ -78,8 +191,11 @@ public class BlackjackTests {
 		}
 	}
 	
+	/**
+	 * Four Decks
+	 */
 	@Test
-	public void testSetUpShoe4Decks() {
+	public void setUpShoeTest2() {
 		setUp(3, 4);
 		int[] spades = new int[13];
 		int[] hearts = new int[13];
@@ -136,4 +252,14 @@ public class BlackjackTests {
 			assertEquals(clubs[i], 4);
 		}
 	}
+	
+	private void setUp(int numPlayers, int numDecks) {
+		house = new House();
+		players = new ArrayList<Player>();
+		for(int i = 0; i < numPlayers; i++) {
+			players.add(new Player(500));
+		}
+		blackjack = new Blackjack(house, players, numDecks);
+	}
+	
 }
