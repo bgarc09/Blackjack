@@ -8,7 +8,6 @@ public class Player {
 	private ArrayList<CardHand> hands; //in order to handle splits
 	private int money;
 	private int currentBet;
-	private int previousBet;
 	private int lastHandWinnings;
 	private int letItRide;
 	private int consecutiveWins;

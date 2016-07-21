@@ -72,8 +72,18 @@ public class Blackjack {
 //		p.getHand().getCards().add(shoe.remove(0));
 //	}
 	
-	public void playGame() {
-		
+	public void playGameTilPlayersBroke() {
+		int counter = 0;
+		while(players.size() > 0) {
+			counter++;
+		}
+		System.out.println("Num Rounds: " + counter);
+	}
+	
+	public void playGameNumRounds(int numRounds) {
+		for(int i = 0; i < players.size(); i++) {
+			System.out.println("Player " + i + ": " +players.get(i).getMoney());
+		}
 	}
 	
 	/**
