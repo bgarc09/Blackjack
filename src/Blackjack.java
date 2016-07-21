@@ -72,16 +72,18 @@ public class Blackjack {
 //		p.getHand().getCards().add(shoe.remove(0));
 //	}
 	
-	public void playGameTilPlayersBroke() {
+	public void playGameTilPlayersBroke(int minBet) {
 		int counter = 0;
 		while(players.size() > 0) {
+			playRound(minBet);
 			counter++;
 		}
 		System.out.println("Num Rounds: " + counter);
 	}
 	
-	public void playGameNumRounds(int numRounds) {
+	public void playGameNumRounds(int numRounds, int minBet) {
 		for(int i = 0; i < players.size(); i++) {
+			playRound(minBet);
 			System.out.println("Player " + i + ": " +players.get(i).getMoney());
 		}
 	}
@@ -95,7 +97,6 @@ public class Blackjack {
 		//ArrayList<Player> playersInRound = new ArrayList<Player>();
 		//betting *********put into a method maybe
 		playRouundMakeBets(minBet);
-		
 		deal();
 		if(dealer.getUpCards().contains("Ace")) {
 			int[] insurance = dealer.offerInsurance(players);
@@ -117,14 +118,6 @@ public class Blackjack {
 				}
 			}
 		} 
-		
-				
-		//logic of blackjack for player (if dealer doesn't have blackjack a.k.a. hidden card hidden) ********** put into method maybe 
-		//rules of blackjack for house *******put into method maybe 
-		
-		//playRoundCheckBlackjack();
-		
-		//deciding who wins ****************put into method maybe
 		dealer.flipHidden();
 		playRoundDetermineWinnersAndPay();
 	}
@@ -158,6 +151,7 @@ public class Blackjack {
 					}
 				}
 			}
+			players.get(i).updateMaxMoney();
 		}
 	}
 	

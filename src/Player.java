@@ -11,6 +11,7 @@ public class Player {
 	private int lastHandWinnings;
 	private int letItRide;
 	private int consecutiveWins;
+	private int maxMoney;
 	
 	public Player(int money, int letItRide) {
 		this.money = money;
@@ -84,6 +85,10 @@ public class Player {
 	
 	public int getLetItRide() {
 		return letItRide;
+	}
+	
+	public int getMaxMoney() {
+		return(maxMoney);
 	}
 	
 	public int getMoney() {
@@ -595,6 +600,10 @@ public class Player {
 		this.lastHandWinnings = lastHandWinnings;
 	}
 	
+	public void setMaxMoney(int maxMoney) {
+		this.maxMoney = maxMoney;
+	}
+	
 	public void setMoeny(int money) {
 		this.money = money;
 	}
@@ -610,5 +619,11 @@ public class Player {
 			return(currentBet / 2);
 		}
 		return(0);
+	}
+	
+	public void updateMaxMoney() {
+		if(money > maxMoney) {
+			maxMoney = money;
+		}
 	}
 }
