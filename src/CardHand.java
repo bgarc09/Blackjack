@@ -87,6 +87,23 @@ public class CardHand {
 		return(foundCounter == foundCard.length);
 	}
 	
+	public boolean equals(Object o) {
+		if(o == null) {
+			return(false);
+		}
+		if(o instanceof CardHand) {
+			boolean result = true;
+			CardHand c = (CardHand)o;
+			for(int i = 0; i < c.getCards().size(); i++) {
+				if(!this.getCards().get(i).equals(c.getCards().get(i))) {
+					result = false;
+				}
+			}
+			return(result);
+		}
+		return(false);
+	}
+	
 	public ArrayList<Card> getCards() {
 		return cards;
 	}

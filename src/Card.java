@@ -11,6 +11,21 @@ public class Card {
 		this.value = value;
 	}
 	
+	public boolean equals(Object o) {
+		if(o == null) {
+			return false;
+		}
+		if(o instanceof Card) {
+			Card c = (Card)o;
+			if(this.getName().equals(c.getName()) && 
+					this.getType().equals(c.getType()) && 
+					this.getValue() == c.getValue()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -23,7 +38,7 @@ public class Card {
 		return value;
 	}
 	
-	public void setName() {
+	public void setName(String name) {
 		this.name = name;
 	}
 	
@@ -31,7 +46,7 @@ public class Card {
 		this.type = type;
 	}
 	
-	public void setValue() {
+	public void setValue(int value) {
 		this.value = value;
 	}
 }
