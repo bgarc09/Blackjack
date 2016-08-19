@@ -19,6 +19,31 @@ public class CardHand {
 		cards.add(a);
 	}
 	
+	public CardHand(Card...c) {
+		this.cards = new ArrayList<Card>();
+		for(int i = 0; i < c.length; i++) {
+			cards.add(c[i]);
+		}
+	}
+	
+	public CardHand(CardHand cards, Card c) {
+		this.cards = new ArrayList<Card>();
+		for(int i = 0; i < cards.getCards().size(); i++) {
+			this.cards.add(cards.getCards().get(i));
+		}
+		this.cards.add(c);
+	}
+	
+	public CardHand(CardHand cards, Card...c) {
+		this.cards = new ArrayList<Card>();
+		for(int i = 0; i < cards.getCards().size(); i++) {
+			this.cards.add(cards.getCards().get(i));
+		}
+		for(int i = 0; i < c.length; i++) {
+			this.cards.add(c[i]);
+		}
+	}
+	
 	public void addCard(Card card) {
 		cards.add(card);
 	}
@@ -49,9 +74,11 @@ public class CardHand {
 		boolean[] foundCard = new boolean[c.length];
 		int foundCounter = 0;
 		for(int i = 0; i < cards.size(); i++) {
-			for(int k = 0; k < foundCard.length; k++) {
+			boolean found = false;
+			for(int k = 0; k < foundCard.length && !found; k++) {
 				if(cards.get(i).equals(c[k]) && !foundCard[k]) {
 					foundCard[k] = true;
+					found = true;
 					foundCounter++;
 				}
 			}
@@ -63,9 +90,11 @@ public class CardHand {
 		boolean[] foundCard = new boolean[cardNames.length];
 		int foundCounter = 0;
 		for(int i = 0; i < cards.size(); i++) {
-			for(int k = 0; k < foundCard.length; k++) {
+			boolean found = false;
+			for(int k = 0; k < foundCard.length && !found; k++) {
 				if(cards.get(i).getName().equals(cardNames[k]) && !foundCard[k]) {
 					foundCard[k] = true;
+					found = true;
 					foundCounter++;
 				}
 			}
@@ -77,9 +106,11 @@ public class CardHand {
 		boolean[] foundCard = new boolean[cardValues.length];
 		int foundCounter = 0;
 		for(int i = 0; i < cards.size(); i++) {
-			for(int k = 0; k < foundCard.length; k++) {
+			boolean found = false;
+			for(int k = 0; k < foundCard.length && !found; k++) {
 				if(cards.get(i).getValue() == (cardValues[k]) && !foundCard[k]) {
 					foundCard[k] = true;
+					found = true;
 					foundCounter++;
 				}
 			}
@@ -113,7 +144,6 @@ public class CardHand {
 		boolean hasAce = false;
 		for(int i = 0; i < cards.size(); i++) {
 			if(cards.get(i).getName().equals("Ace")) {
-				//aceCount++;
 				hasAce = true;
 			}
 			total += cards.get(i).getValue();

@@ -6,12 +6,21 @@ import org.junit.Test;
 
 
 public class BlackjackTests {
-	private House house;
-	private ArrayList<Player> players;
-	private Blackjack blackjack;
 
 	//Set Up
-	
+	public ArrayList<Player> playersSetUp() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		Player a = new Player(100);
+		a.addHand(new CardHand(new Card("Spade", "Ace", 1), new Card("Spade", "King", 10)));
+		players.add(a);
+		Player b = new Player(100);
+		b.addHand(new CardHand(new Card("Spade", "Five", 5), new Card("Spade", "Four", 4)));
+		players.add(b);
+		Player c = new Player(100);
+		c.addHand(new CardHand(new Card("Spade", "Ace", 1), new Card("Spade", "Nine", 9)));
+		players.add(c);
+		return(players);
+	}
 	//Blackjack Tests
 	
 	//Card Tests
@@ -60,6 +69,7 @@ public class BlackjackTests {
 		assertTrue(new Card("Heart", "Eight", 8).equals(hand.getCards().get(2)));
 	}
 	
+	@Test
 	public void testContains_CardParameter() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2));
 		assertTrue(hand.contains(new Card("Spade", "Ten", 10)));
@@ -67,6 +77,7 @@ public class BlackjackTests {
 		assertFalse(hand.contains(new Card("Heart", "Ten", 10)));
 	}
 	
+	@Test
 	public void testContains_StringParameter() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2));
 		assertTrue(hand.contains("Ten"));
@@ -74,6 +85,7 @@ public class BlackjackTests {
 		assertFalse(hand.contains("Five"));
 	}
 	
+	@Test
 	public void testContains_IntParameter() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2));
 		assertTrue(hand.contains(10));
@@ -81,6 +93,7 @@ public class BlackjackTests {
 		assertFalse(hand.contains(5));
 	}
 	
+	@Test
 	public void testContains_CardsParameter1() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2));
 		assertTrue(hand.contains(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2)));
@@ -88,12 +101,14 @@ public class BlackjackTests {
 		assertFalse(hand.contains(new Card("Spade", "Ten", 10), new Card("Heart", "Three", 3), new Card("Heart", "Two", 2)));
 	}
 	
+	@Test
 	public void testContains_CardsParameter2() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "Ten", 10));
 		assertTrue(hand.contains(new Card("Spade", "Ten", 10), new Card("Spade", "Ten", 10)));
 		assertFalse(hand.contains(new Card("Spade", "Ten", 10), new Card("Spade", "Ten", 10), new Card("Spade", "Ten", 10)));
 	}
 	
+	@Test
 	public void testContains_StringsParameter1() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2));
 		assertTrue(hand.contains("Ten", "Two"));
@@ -101,12 +116,14 @@ public class BlackjackTests {
 		assertFalse(hand.contains("Ten", "Three", "Two"));
 	}
 	
+	@Test
 	public void testContains_StringsParameter2() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "Ten", 10));
 		assertTrue(hand.contains("Ten", "Ten"));
 		assertFalse(hand.contains("Ten", "Ten", "Ten"));
 	}
 	
+	@Test
 	public void testContains_IntsParameter1() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2));
 		assertTrue(hand.contains(10, 2));
@@ -114,15 +131,206 @@ public class BlackjackTests {
 		assertFalse(hand.contains(10, 3, 2));
 	}
 	
+	@Test
 	public void testContains_IntsParameter2() {
 		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "Ten", 10));
 		assertTrue(hand.contains(10, 10));
 		assertFalse(hand.contains(10, 10, 10));
 	}
+	
+	@Test
+	public void testEquals() {
+		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2));
+		assertTrue(hand.equals(new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2))));
+		assertFalse(hand.equals(new CardHand(new Card("Spade", "Ten", 10), new Card("Club", "Two", 2))));
+	}
+	
+	@Test
+	public void testHandTotal1() {
+		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Two", 2));
+		assertEquals(12, hand.handTotal());
+		hand.addCard(new Card("Spade", "Five", 5));
+		assertEquals(17, hand.handTotal());
+		hand.addCard(new Card("Heart", "Ace", 1));
+		assertEquals(18, hand.handTotal());
+		hand.addCard(new Card("Diamond", "King", 10));
+		assertEquals(28, hand.handTotal());
+	}
+	
+	@Test
+	public void testHandTotal2() {
+		CardHand hand = new CardHand(new Card("Spade", "Ten", 10), new Card("Heart", "Ace", 1));
+		assertEquals(21, hand.handTotal());
+		hand.addCard(new Card("Diamond", "Queen", 10));
+		assertEquals(21, hand.handTotal());
+	}
+	
+	@Test
+	public void testHandTotal3() {
+		CardHand hand = new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1));
+		assertEquals(12, hand.handTotal());
+		hand.addCard(new Card("Diamond", "Ace", 1));
+		assertEquals(13, hand.handTotal());
+		hand.addCard(new Card("Diamond", "Five", 5));
+		assertEquals(18, hand.handTotal());
+		hand.addCard(new Card("Diamond", "Queen", 10));
+		assertEquals(18, hand.handTotal());
+	}
+	
+	@Test
+	public void testRemoveCard() {
+		CardHand hand = new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1));
+		hand.remove(0);
+		assertEquals(hand.numCards(), 1);
+		assertTrue(hand.getCards().get(0).equals(new Card("Heart", "Ace", 1)));
+		hand.addCard(new Card("Diamond", "Queen", 10));
+		assertEquals(hand.numCards(), 2);
+		assertTrue(hand.getCards().get(1).equals(new Card("Diamond", "Queen", 10)));
+		hand.addCard(new Card("Diamond", "Jack", 10));
+		assertEquals(hand.numCards(), 3);
+		assertTrue(hand.getCards().get(2).equals(new Card("Diamond", "Jack", 10)));
+		hand.remove(0);
+		assertEquals(hand.numCards(), 2);
+		assertTrue(hand.getCards().get(0).equals(new Card("Diamond", "Queen", 10)));
+		hand.remove(1);
+		assertEquals(hand.numCards(), 1);
+		assertTrue(hand.getCards().get(0).equals(new Card("Diamond", "Queen", 10)));
+	}
 
 	//House Tests
+	@Test
+	public void testCollectBets1() {
+		House dealer = new House();
+		dealer.collectBet(50);
+		assertEquals(50, dealer.getWinnings());
+		dealer.collectBet(100);
+		assertEquals(150, dealer.getWinnings());
+	}
+	
+	@Test
+	public void testDispenseWinnings1() {
+		House dealer = new House();
+		dealer.dispenseWinnings(50);
+		assertEquals(-50, dealer.getWinnings());
+		dealer.collectBet(100);
+		assertEquals(50, dealer.getWinnings());
+		dealer.dispenseWinnings(45);
+		assertEquals(5, dealer.getWinnings());
+	}
+	
+	@Test
+	public void testFlipHidden1() {
+		House dealer = new House();
+		dealer.setHidden(new Card("Spade", "Five", 5));
+		assertEquals(0, dealer.getUpCards().getCards().size());
+		dealer.flipHidden();
+		assertEquals(1, dealer.getUpCards().getCards().size());
+		assertTrue(new CardHand(new Card("Spade", "Five", 5)).equals(dealer.getUpCards()));
+	}
+	
+	@Test
+	public void testFlipHidden2() {
+		House dealer = new House();
+		dealer.setHidden(new Card("Spade", "Five", 5));
+		dealer.setUpCards(new CardHand(new Card("Spade", "Six", 6)));
+		dealer.flipHidden();
+		assertEquals(2, dealer.getUpCards().getCards().size());
+		assertTrue(dealer.getUpCards().equals(new CardHand(new Card("Spade", "Six", 6), new Card("Spade", "Five", 5))));
+	}
+	
+	@Test
+	public void testDealerHandTotal1() {
+		//no ace
+		House dealer = new House();
+		dealer.setHidden(new Card("Spade", "Five", 5));
+		dealer.setUpCards(new CardHand(new Card("Spade", "Six", 6)));
+		assertEquals(dealer.handTotal(), 11);
+		dealer.getUpCards().addCard(new Card("Spade", "Two", 2));
+		assertEquals(dealer.handTotal(), 13);
+		dealer.flipHidden();
+		assertEquals(dealer.handTotal(), 13);
+	}
+	
+	@Test
+	public void testOfferInsurance() {
+		House dealer = new House();
+		dealer.setHidden(new Card("Spade", "Five", 5));
+		dealer.setUpCards(new CardHand(new Card("Spade", "Ace", 1)));
+		ArrayList<Player> players = playersSetUp();
+		for(int i = 0; i < players.size(); i++) {
+			players.get(i).bet(50);
+		}
+		int[] insurance = dealer.offerInsurance(players);
+		int[] checkInsurance = {25,0,0};
+		assertEquals(checkInsurance[0], insurance[0]);
+		assertEquals(checkInsurance[1], insurance[1]);
+		assertEquals(checkInsurance[2], insurance[2]);
+		assertEquals(25, players.get(0).getMoney());
+		assertEquals(50, players.get(1).getMoney());
+		assertEquals(50, players.get(2).getMoney());
+	}
 	
 	//Player Tests
+	@Test
+	public void testAddHand1() {
+		Player p = new Player(100);
+		assertEquals(0, p.getHands().size());
+		p.addHand(new CardHand());
+		assertEquals(1, p.getHands().size());
+		p.addHand(new CardHand());
+		assertEquals(2, p.getHands().size());
+	}
+	
+	public void testBet1() {
+		Player p = new Player(100);
+		assertTrue(p.bet(25));
+		assertEquals(75, p.getMaxMoney());
+		assertFalse(p.bet(100));
+		assertEquals(75, p.getMaxMoney());
+		assertTrue(p.bet(50));
+		assertEquals(25, p.getMaxMoney());
+		assertTrue(p.bet(25));
+		assertEquals(0, p.getMaxMoney());
+		assertFalse(p.bet(25));
+		assertEquals(0, p.getMaxMoney());
+	}
+	
+	@Test
+	public void testCollectWinnings1() {
+		Player p = new Player(100);
+		p.collectWinnings(100);
+		assertEquals(200, p.getMoney());
+		p.collectWinnings(0);
+		assertEquals(200, p.getMoney());
+	}
+	
+	@Test
+	public void testDoubleDown1() {
+		Player p = new Player(100);
+		p.bet(10);
+		CardHand hand = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2));
+		assertTrue(p.doubleDown(hand, new Card("Heart", "King", 10)));
+		assertEquals(80, p.getMoney());
+		assertEquals(3, hand.getCards().size());
+		CardHand result = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2), new Card("Heart", "King", 10) );
+		assertTrue(hand.equals(result));
+	}
+	
+	@Test
+	public void testHit1() {
+		Player p = new Player(100);
+		CardHand hand = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2));
+		p.hit(hand, new Card("Heart", "King", 10));
+		assertEquals(3, hand.getCards().size());
+		CardHand result = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2), new Card("Heart", "King", 10) );
+		assertTrue(hand.equals(result));
+	}
+	
+	
+	
+	//Shoe Tests
+	
+	
 	
 //	@Test
 //	public void bustTest1() {

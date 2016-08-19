@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-
 public class House {
 
 	private int winnings;
@@ -41,16 +40,15 @@ public class House {
 		if(hidden == null) {
 			return(upCards.handTotal());
 		} else {
-			return(hidden.getValue() + upCards.handTotal());
+			CardHand temp = new CardHand(upCards, hidden);
+			return(temp.handTotal());
 		}
 	}
 	
 	public int[] offerInsurance(ArrayList<Player> players) {
 		int[] takesInsurance = new int[players.size()];
 		for(int i = 0; i < players.size(); i++) {
-			for(int k = 0; k < players.get(i).getHands().size(); k++) {
-				takesInsurance[i] = players.get(i).takeInsurance(players.get(i).getHand(k));
-			}
+			takesInsurance[i] = players.get(i).takeInsurance(players.get(i).getHand(0));
 		}
 		return(takesInsurance);
 	}

@@ -1,10 +1,7 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
-
 
 public class Player {
 
-	//private CardHand hand;
 	private ArrayList<CardHand> hands; //in order to handle splits
 	private int money;
 	private int currentBet;
@@ -17,7 +14,6 @@ public class Player {
 		this.money = money;
 		this.letItRide = letItRide;
 		hands = new ArrayList<CardHand>();
-		//hand = new CardHand();
 	}
 	
 	public Player(int money) {
@@ -67,10 +63,6 @@ public class Player {
 		return currentBet;
 	}
 	
-	//public CardHand getHand() {
-	//	return hand;
-	//}
-	
 	public CardHand getHand(int index) {
 		return hands.get(index);
 	}
@@ -99,7 +91,7 @@ public class Player {
 		hand.addCard(card);
 	}
 	
-	public void playerDecision(CardHand dealerUpCard, CardHand hand, LinkedList<Card> shoe) {
+	public void playerDecision(CardHand dealerUpCard, CardHand hand, Shoe shoe) {
 		boolean stay = false;
 		while(!stay) {
 			if(hand.numCards() == 2 && hand.contains(10,10)) {
@@ -574,15 +566,6 @@ public class Player {
 			}
 		}
 	}
-	
-//	public void playHand(CardHand hand, int bet) {
-//		money -= bet;
-//		this.hand = hand;
-//	}
-	
-//	public void setCards(CardHand hand) {
-//		this.hand = hand;
-//	}
 	
 	public void setHands(ArrayList<CardHand> hands) {
 		this.hands = hands;
