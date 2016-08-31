@@ -3,6 +3,8 @@ import java.util.ArrayList;
 public class CardHand {
 	
 	private ArrayList<Card> cards;
+	private int bet;
+	private int insurance = 0;
 	
 	public CardHand() {
 		cards = new ArrayList<Card>();
@@ -14,9 +16,22 @@ public class CardHand {
 		cards.add(b);
 	}
 	
+	public CardHand(Card a, Card b, int bet) {
+		cards = new ArrayList<Card>();
+		cards.add(a);
+		cards.add(b);
+		this.bet = bet;
+	}
+	
 	public CardHand(Card a) {
 		cards = new ArrayList<Card>();
 		cards.add(a);
+	}
+	
+	public CardHand(Card a, int bet) {
+		cards = new ArrayList<Card>();
+		cards.add(a);
+		this.bet = bet;
 	}
 	
 	public CardHand(Card...c) {
@@ -24,6 +39,14 @@ public class CardHand {
 		for(int i = 0; i < c.length; i++) {
 			cards.add(c[i]);
 		}
+	}
+	
+	public CardHand(int bet, Card...c) {
+		this.cards = new ArrayList<Card>();
+		for(int i = 0; i < c.length; i++) {
+			cards.add(c[i]);
+		}
+		this.bet = bet;
 	}
 	
 	public CardHand(CardHand cards, Card c) {
@@ -34,6 +57,15 @@ public class CardHand {
 		this.cards.add(c);
 	}
 	
+	public CardHand(CardHand cards, Card c, int bet) {
+		this.cards = new ArrayList<Card>();
+		for(int i = 0; i < cards.getCards().size(); i++) {
+			this.cards.add(cards.getCards().get(i));
+		}
+		this.cards.add(c);
+		this.bet = bet;
+	}
+	
 	public CardHand(CardHand cards, Card...c) {
 		this.cards = new ArrayList<Card>();
 		for(int i = 0; i < cards.getCards().size(); i++) {
@@ -42,6 +74,17 @@ public class CardHand {
 		for(int i = 0; i < c.length; i++) {
 			this.cards.add(c[i]);
 		}
+	}
+	
+	public CardHand(CardHand cards, int bet, Card...c) {
+		this.cards = new ArrayList<Card>();
+		for(int i = 0; i < cards.getCards().size(); i++) {
+			this.cards.add(cards.getCards().get(i));
+		}
+		for(int i = 0; i < c.length; i++) {
+			this.cards.add(c[i]);
+		}
+		this.bet = bet;
 	}
 	
 	public void addCard(Card card) {
@@ -125,18 +168,28 @@ public class CardHand {
 		if(o instanceof CardHand) {
 			boolean result = true;
 			CardHand c = (CardHand)o;
-			for(int i = 0; i < c.getCards().size(); i++) {
-				if(!this.getCards().get(i).equals(c.getCards().get(i))) {
-					result = false;
+			if(c.getCards().size() == this.getCards().size()) {
+				for(int i = 0; i < c.getCards().size(); i++) {
+					if(!this.getCards().get(i).equals(c.getCards().get(i))) {
+						result = false;
+					}
 				}
+				return(result);
 			}
-			return(result);
 		}
 		return(false);
 	}
 	
+	public int getBet() {
+		return bet;
+	}
+	
 	public ArrayList<Card> getCards() {
 		return cards;
+	}
+	
+	public int getInsurance() {
+		return insurance;
 	}
 	
 	public int handTotal() {
@@ -162,7 +215,15 @@ public class CardHand {
 		return cards.remove(index);
 	}
 	
+	public void setBet(int bet) {
+		this.bet = bet;
+	}
+	
 	public void setCards(ArrayList<Card> cards) {
 		this.cards = cards; 
+	}
+	
+	public void setInsurance(int insurance) {
+		this.insurance = insurance;
 	}
 }

@@ -7,23 +7,24 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Shoe {
-	private LinkedList<Card> shoe;
+	private LinkedList<Card> cards;
 	private int cutCard;
 	private int currentCard;
 
 	public Shoe() {
-		shoe = new LinkedList<Card>();
+		cards = new LinkedList<Card>();
 	}
 	
 	public Shoe(int numDecks) {
 		this();
+		Random rand = new Random();
 		setUpShoe(numDecks);
 		currentCard = 0;
-		cutCard = shoe.size() / 4;
+		cutCard = (cards.size() / (2 * numDecks)) - (numDecks) + rand.nextInt(numDecks * 2);
 	}
 	
 	public boolean add(Card card) {
-		return(shoe.add(card));
+		return(cards.add(card));
 	}
 	
 	public int getCurrentCard() {
@@ -35,7 +36,7 @@ public class Shoe {
 	}
 	
 	public LinkedList<Card> getShoe() {
-		return(shoe);
+		return(cards);
 	}
 	
 	public ArrayList<Card> readInDeck() throws FileNotFoundException {
@@ -63,16 +64,16 @@ public class Shoe {
 	}
 	
 	public Card remove() {
-		return(shoe.remove());
+		return(cards.remove());
 	}
 	
 	public Card remove(int index) {
-		return(shoe.remove(index));
+		return(cards.remove(index));
 	}
 	
 	public Card removeFirst() {
 		currentCard++;
-		return(shoe.removeFirst());
+		return(cards.removeFirst());
 	}
 	
 	public void setCurrentCard(int currentCard) {
@@ -83,13 +84,12 @@ public class Shoe {
 		this.cutCard = cutCard;
 	}
 	
-	public void setShoe(LinkedList<Card> shoe) {
-		this.shoe = shoe;
+	public void setShoe(LinkedList<Card> cards) {
+		this.cards = cards;
 	}
 	
 	public void setUpShoe(int numDecks) {
 		ArrayList<Card> decks = new ArrayList<Card>();
-		Random rand = new Random();
 		for(int i = 0; i < numDecks; i++) {
 			try{
 				decks.addAll(readInDeck());
@@ -97,17 +97,14 @@ public class Shoe {
 				System.err.println("File not found");
 			}
 		}
-		while(decks.size() != 0) {
-			int index = rand.nextInt(decks.size());
-			shoe.add(decks.remove(index));
-		}
+		shufleShoe(decks);
 	}
 	
 	public void shufleShoe(ArrayList<Card> decks) {
 		Random rand = new Random();
 		while(decks.size() != 0) {
 			int index = rand.nextInt(decks.size());
-			shoe.add(decks.remove(index));
+			cards.add(decks.remove(index));
 		}
 	}
 }

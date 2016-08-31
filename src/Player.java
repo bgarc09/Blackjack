@@ -24,19 +24,30 @@ public class Player {
 		hands.add(newHand);
 	}
 	
+	//testing purposes
+	public boolean bet(int amount) {
+		if(amount < money) {
+			money -= amount;
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * 
 	 * @param amount
 	 * @return True if the player has enough money to complete the bet
 	 */
-	public boolean bet(int amount) {
+	public boolean bet(int amount, CardHand hand) {
 		if(amount < money) {
 			money -= amount;
-			currentBet = amount;
+			hand.setBet(amount);
 			return true;
 		}
 		return false;
 	}
+	
+	
 	
 	public void collectWinnings(int winnings) {
 		money += winnings;
@@ -44,15 +55,13 @@ public class Player {
 	}
 	
 	public boolean doubleDown(CardHand hand, Card c) {
-		if(currentBet < money) {
-			money -= currentBet;
-			currentBet = currentBet * 2;
+		if(hand.getBet() < money) {
+			money -= hand.getBet();
+			hand.setBet(hand.getBet() * 2);
 			hit(hand, c);
-			return true;
-		} else {
-			hit(hand, c);
-			return false;
-		}
+			return(true);
+		} 
+		return(false);
 	}
 	
 	public int getConsecutiveWins() {
@@ -89,6 +98,12 @@ public class Player {
 	
 	public void hit(CardHand hand, Card card) {
 		hand.addCard(card);
+	}
+	
+	public void insuranceDecision(CardHand hand) {
+		if(hand.handTotal() == 21) {
+			this.takeInsurance(hand, hand.getBet() / 2);
+		}
 	}
 	
 	public void playerDecision(CardHand dealerUpCard, CardHand hand, Shoe shoe) {
@@ -591,17 +606,33 @@ public class Player {
 		this.money = money;
 	}
 	
-	public void split(CardHand hand, Card a, Card b) {
-		hands.add(new CardHand(hand.remove(1), b));
-		hand.addCard(a);
+	public boolean split(CardHand hand, Card a, Card b) {
+		if(money >= hand.getBet()) {
+			hands.add(new CardHand(hand.remove(1), b));
+			this.bet(hand.getBet(), hands.get(hands.size() - 1));
+			hand.addCard(a);
+			return(true);
+		}
+		return(false);
 	}
 	
-	public int takeInsurance(CardHand hand) {
-		if(hand.numCards() == 2 && hand.handTotal() == 21) {
-			money -= currentBet / 2;
-			return(currentBet / 2);
+	public boolean decideOnInsurance(CardHand hand) {
+		if(hand.handTotal() == 21) {
+			return(takeInsurance(hand, hand.getBet() / 2));
 		}
-		return(0);
+		return(false);
+	}
+	
+	public boolean takeInsurance(CardHand hand, int amount) {
+		if(amount > hand.getBet() / 2) {
+			amount = hand.getBet() / 2;
+		}
+		if(money >= amount) {
+			money -= amount;
+			hand.setInsurance(amount);
+			return(true);
+		}
+		return(false);
 	}
 	
 	public void updateMaxMoney() {
