@@ -5,11 +5,12 @@ public class Blackjack {
 	private House dealer;
 	private ArrayList<Player> players;
 	private Shoe shoe;
-	private int cutCard;
+	private int numDecks;
 	
 	public Blackjack(House dealer, ArrayList<Player> players, int numDecks) {
 		this.dealer = dealer;
 		this.players = new ArrayList<Player>(players);
+		this.numDecks = numDecks;
 		this.shoe = new Shoe(numDecks);
 	}
 	
@@ -33,22 +34,26 @@ public class Blackjack {
 		}
 	}
 	
+	public void cutPlayers(int minBet) {
+		for(int i = 0; i < players.size(); i++) {
+			if(players.get(i).getMoney() < minBet) {
+				players.remove(i);
+			}
+		}
+	}
+	
 	/**
 	 * Deals two cards to each player and the dealer
 	 */
 	public void deal() {
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).addHand(new CardHand(shoe.removeFirst()));
+			players.get(i).addHand(new CardHand(players.get(i).getCurrentBet(), shoe.removeFirst()));
 		}
 		dealer.setHidden(shoe.removeFirst());
 		for(int i = 0; i < players.size(); i++) {
 			players.get(i).getHand(0).addCard(shoe.removeFirst());
 		}
 		dealer.getUpCards().addCard(shoe.removeFirst());
-	}
-	
-	public int getCutCard() {
-		return(cutCard);
 	}
 	
 	public House getDealer() {
@@ -59,17 +64,11 @@ public class Blackjack {
 		return players;
 	}
 	
-	//public LinkedList<Card> getShoe() {
-	//	return shoe;
-	//}
-	
-//	/**
-//	 * Gives the player a new card for their hand
-//	 * @param p 
-//	 */
-//	public void hit(Player p) {
-//		p.getHand().getCards().add(shoe.remove(0));
-//	}
+	public void makeBets(int minBet) {
+		for(int i = 0; i < players.size(); i++) {
+			dealer.collectBet(players.get(i).determineBet(minBet));
+		}
+	}
 	
 	public void playGameTilPlayersBroke(int minBet) {
 		int counter = 0;
@@ -92,31 +91,47 @@ public class Blackjack {
 	 * @param minBet
 	 */
 	public void playRound(int minBet) {
-		boolean dealerBlackjack = false;
-		playRouundMakeBets(minBet);
+		cutPlayers(minBet);
+		makeBets(minBet);
 		deal();
-		if(dealer.getUpCards().contains("Ace")) {
-			int[] insurance = dealer.offerInsurance(players);
-			if(dealer.getHidden().getValue() == 10) {
-				dealerBlackjack = true;
-				for(int i = 0; i < insurance.length; i++) {
-					players.get(i).setMoeny(players.get(i).getMoney() + insurance[i] * 2);
-				}
-			} else {
-				for(int i = 0; i < insurance.length; i++) {
-					dealer.collectBet(insurance[i]);
-				}
+		if(dealer.getUpCards().getCards().get(0).getValue() == 1) {
+			dealer.offerInsurance(players);
+		}
+		for(int i = 0; i < players.size(); i++) {
+			for(int k = 0; k < players.get(i).getHands().size(); k++) {
+				players.get(i).playerDecision(dealer.getUpCards(), players.get(i).getHand(k), shoe);
 			}
-		} 
-		if(!dealerBlackjack) {
-			for(int i = 0; i < players.size(); i++) {
-				for(int k = 0; k < players.get(i).getHands().size(); k++) {
-					players.get(i).playerDecision(dealer.getUpCards(), players.get(i).getHand(k), shoe);
-				}
-			}
-		} 
-		dealer.flipHidden();
-		playRoundDetermineWinnersAndPay();
+		}
+		
+		
+		if(shoe.getCurrentCard() > shoe.getCutCard()) {
+			shoe.setUpShoe(numDecks);
+		}
+//		boolean dealerBlackjack = false;
+//		playRouundMakeBets(minBet);
+//		deal();
+//		if(dealer.getUpCards().contains("Ace")) {
+//			int[] insurance = dealer.offerInsurance(players);
+//			if(dealer.getHidden().getValue() == 10) {
+//				dealerBlackjack = true;
+//				for(int i = 0; i < insurance.length; i++) {
+//					players.get(i).setMoeny(players.get(i).getMoney() + insurance[i] * 2);
+//				}
+//			} else {
+//				for(int i = 0; i < insurance.length; i++) {
+//					dealer.collectBet(insurance[i]);
+//				}
+//			}
+//		} 
+//		if(!dealerBlackjack) {
+//			for(int i = 0; i < players.size(); i++) {
+//				for(int k = 0; k < players.get(i).getHands().size(); k++) {
+//					players.get(i).playerDecision(dealer.getUpCards(), players.get(i).getHand(k), shoe);
+//				}
+//			}
+//		} 
+//		dealer.flipHidden();
+//		playRoundDetermineWinnersAndPay();
 	}
 	
 	public void playRoundDetermineWinnersAndPay() {
@@ -150,26 +165,6 @@ public class Blackjack {
 			}
 			players.get(i).updateMaxMoney();
 		}
-	}
-	
-	public void playRouundMakeBets(int minBet) {
-		for(int i = 0; i < players.size(); i++) {
-			//let it ride system
-			if(players.get(i).getConsecutiveWins() > 0) {
-				players.get(i).bet(players.get(i).getLastHandWinnings());
-				dealer.collectBet(players.get(i).getLastHandWinnings());
-			} else {
-				if(!players.get(i).bet(minBet)) {
-					players.remove(i);
-				} else {
-					dealer.collectBet(minBet);
-				}
-			}
-		}
-	}
-
-	public void setCutCard(int cutCard) {
-		this.cutCard = cutCard;
 	}
 	
 	public void setDealer(House dealer) {

@@ -45,14 +45,6 @@ public class House {
 		}
 	}
 	
-//	public int[] offerInsurance(ArrayList<Player> players) {
-//		int[] takesInsurance = new int[players.size()];
-//		for(int i = 0; i < players.size(); i++) {
-//			takesInsurance[i] = players.get(i).insuranceDecision(players.get(i).getHand(0));
-//		}
-//		return(takesInsurance);
-//	}
-	
 	public void offerInsurance(ArrayList<Player> players) {
 		for(int i = 0; i < players.size(); i++) {
 			for(int k = 0; k < players.get(i).getHands().size(); k++) {

@@ -59,6 +59,20 @@ public class Player {
 		return(false);
 	}
 	
+	public int determineBet(int minBet) {
+		if(consecutiveWins == letItRide) {
+			consecutiveWins = 0;
+			currentBet = minBet;
+			return(minBet);
+		} else if(lastHandWinnings != 0){
+			currentBet = lastHandWinnings;
+			return(lastHandWinnings);
+		} else {
+			currentBet = minBet;
+			return(minBet);
+		}
+	}
+	
 	
 	public boolean doubleDown(CardHand hand, Card c) {
 		if(hand.getBet() < money) {
