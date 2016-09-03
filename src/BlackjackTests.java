@@ -350,15 +350,44 @@ public class BlackjackTests {
 	public void testSplit1() {
 		Player p = new Player(100);
 		p.bet(30);
+		assertEquals(70, p.getMoney());
 		CardHand hand = new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1), 30);
 		p.addHand(hand);
 		p.split(p.getHand(0), new Card("Heart", "Nine", 9), new Card("Club", "Eight", 8));
-		
+		assertEquals(40, p.getMoney());
+		assertEquals(p.getHand(0), new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Nine", 9)));
+		assertEquals(p.getHand(1), new CardHand(new Card("Heart", "Ace", 1), new Card("Club", "Eight", 8)));
+	}
+	
+	public void testSplit2() {
+		Player p = new Player(100);
+		p.bet(60);
+		assertEquals(70, p.getMoney());
+		CardHand hand = new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1), 30);
+		p.addHand(hand);
+		p.split(p.getHand(0), new Card("Heart", "Nine", 9), new Card("Club", "Eight", 8));
+		assertEquals(p.getHand(0), new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1)));
+		assertEquals(40, p.getMoney());
 	}
 	
 	//Shoe Tests
-	
-	
+	@Test
+	public void testSeUpShoe() {
+		Shoe s = new Shoe(4);
+		assertEquals(208, s.getShoe().size());
+		ArrayList<Card> deck1 = new ArrayList<Card>();
+		try{
+			deck1 = s.readInDeck();
+		} catch(Exception e) {
+			System.err.println(e.getMessage());
+		}
+		for(int i = 0; i < 4; i++) {
+			for(int k = 0; k < deck1.size(); k++) {
+				s.getShoe().remove(deck1.get(k));
+			}
+		}
+		assertEquals(0, s.getShoe().size());
+	}
 	
 //	@Test
 //	public void bustTest1() {

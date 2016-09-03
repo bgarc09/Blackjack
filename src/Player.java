@@ -47,12 +47,18 @@ public class Player {
 		return false;
 	}
 	
-	
-	
 	public void collectWinnings(int winnings) {
 		money += winnings;
 		lastHandWinnings = winnings;
 	}
+	
+	public boolean decideOnInsurance(CardHand hand) {
+		if(hand.handTotal() == 21) {
+			return(takeInsurance(hand, hand.getBet() / 2));
+		}
+		return(false);
+	}
+	
 	
 	public boolean doubleDown(CardHand hand, Card c) {
 		if(hand.getBet() < money) {
@@ -125,7 +131,11 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(4,4)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(5,5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(6,6)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(7,7)) {
@@ -147,11 +157,23 @@ public class Player {
 				} else if(hand.numCards() == 2 && (hand.contains(1, 8) || hand.contains(1, 9) || hand.contains(1, 10))) {
 					hit(hand, shoe.removeFirst());				
 				} else if(hand.handTotal() == 9) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 10) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 13) {
@@ -171,7 +193,11 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(4,4)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(5,5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(6,6)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(7,7)) {
@@ -187,17 +213,37 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(1, 5)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(1, 6)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 7)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && (hand.contains(1, 8) || hand.contains(1, 9) || hand.contains(1, 10))) {
 					hit(hand, shoe.removeFirst());			
 				} else if(hand.handTotal() == 9) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 10) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 13) {
@@ -217,7 +263,11 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(4,4)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(5,5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(6,6)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(7,7)) {
@@ -229,21 +279,49 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(1, 3)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(1, 4)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 6)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 7)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && (hand.contains(1, 8) || hand.contains(1, 9) || hand.contains(1, 10))) {
 					hit(hand, shoe.removeFirst());				
 				} else if(hand.handTotal() == 9) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 10) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					stay = true;
 				} else if(hand.handTotal() == 13) {
@@ -263,7 +341,11 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(4,4)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(5,5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(6,6)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(7,7)) {
@@ -271,25 +353,61 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(9,9)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(1, 2)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 3)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 4)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 6)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 7)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && (hand.contains(1, 8) || hand.contains(1, 9) || hand.contains(1, 10))) {
 					stay = true;		
 				} else if(hand.handTotal() == 9) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 10) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					stay = true;
 				} else if(hand.handTotal() == 13) {
@@ -309,7 +427,11 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(4,4)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(5,5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(6,6)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(7,7)) {
@@ -317,25 +439,61 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(9,9)) {
 					split(hand, shoe.removeFirst(), shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(1, 2)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 3)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 4)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 6)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(1, 7)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && (hand.contains(1, 8) || hand.contains(1, 9) || hand.contains(1, 10))) {
 					hit(hand, shoe.removeFirst());			
 				} else if(hand.handTotal() == 9) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 10) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					stay = true;
 				} else if(hand.handTotal() == 13) {
@@ -355,7 +513,11 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(4,4)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(5,5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(6,6)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(7,7)) {
@@ -379,9 +541,17 @@ public class Player {
 				} else if(hand.handTotal() == 9) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 10) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 13) {
@@ -401,7 +571,11 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(4,4)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(5,5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(6,6)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(7,7)) {
@@ -425,9 +599,17 @@ public class Player {
 				} else if(hand.handTotal() == 9) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 10) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 13) {
@@ -447,7 +629,11 @@ public class Player {
 				} else if(hand.numCards() == 2 && hand.contains(4,4)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(5,5)) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.numCards() == 2 && hand.contains(6,6)) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.numCards() == 2 && hand.contains(7,7)) {
@@ -471,9 +657,17 @@ public class Player {
 				} else if(hand.handTotal() == 9) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 10) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 13) {
@@ -519,7 +713,11 @@ public class Player {
 				} else if(hand.handTotal() == 10) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 13) {
@@ -566,7 +764,11 @@ public class Player {
 				} else if(hand.handTotal() == 10) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 11) {
-					stay = doubleDown(hand, shoe.removeFirst());
+					Card card = shoe.removeFirst();
+					stay = doubleDown(hand, card);
+					if(!stay) {
+						hit(hand, card);
+					}
 				} else if(hand.handTotal() == 12) {
 					hit(hand, shoe.removeFirst());
 				} else if(hand.handTotal() == 13) {
@@ -612,13 +814,6 @@ public class Player {
 			this.bet(hand.getBet(), hands.get(hands.size() - 1));
 			hand.addCard(a);
 			return(true);
-		}
-		return(false);
-	}
-	
-	public boolean decideOnInsurance(CardHand hand) {
-		if(hand.handTotal() == 21) {
-			return(takeInsurance(hand, hand.getBet() / 2));
 		}
 		return(false);
 	}
