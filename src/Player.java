@@ -73,7 +73,6 @@ public class Player {
 		}
 	}
 	
-	
 	public boolean doubleDown(CardHand hand, Card c) {
 		if(hand.getBet() < money) {
 			money -= hand.getBet();
