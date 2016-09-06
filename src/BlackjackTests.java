@@ -81,6 +81,16 @@ public class BlackjackTests {
 		}
 	}
 	
+	@Test
+	public void testMakeBets() {
+		Blackjack blackjack = blackjackSetUp();
+		blackjack.makeBets(10);
+		assertEquals(40, blackjack.getDealer().getWinnings());
+		for(int i = 0; i < blackjack.getPlayers().size(); i++) {
+			assertEquals(90, blackjack.getPlayers().get(i).getMoney());
+		}
+	}
+	
 	//Card Tests
 	@Test
 	public void testEqualCard1() {

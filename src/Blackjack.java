@@ -123,8 +123,6 @@ public class Blackjack {
 						dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2);
 						roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
 					}
-				} else if(bust(players.get(i).getHand(k))) {
-					
 				} else {
 					if(checkBlackjack(players.get(i).getHand(k))) {
 						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5));
@@ -136,6 +134,11 @@ public class Blackjack {
 						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() * 2);
 						roundEarnings += players.get(i).getHand(k).getBet() * 2;
 					}
+				}
+				if(roundEarnings > 0) {
+					players.get(i).setConsecutiveWins(players.get(i).getConsecutiveWins() + 1);
+				} else {
+					players.get(i).setConsecutiveWins(0);
 				}
 				players.get(i).setLastHandWinnings(roundEarnings);
 				players.get(i).updateMaxMoney();

@@ -65,14 +65,13 @@ public class Player {
 		if(consecutiveWins == letItRide) {
 			consecutiveWins = 0;
 			currentBet = minBet;
-			return(minBet);
 		} else if(lastHandWinnings != 0){
 			currentBet = lastHandWinnings;
-			return(lastHandWinnings);
 		} else {
 			currentBet = minBet;
-			return(minBet);
 		}
+		bet(currentBet);
+		return(currentBet);
 	}
 	
 	public boolean doubleDown(CardHand hand, Card c) {
