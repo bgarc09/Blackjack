@@ -107,31 +107,6 @@ public class Blackjack {
 		if(shoe.getCurrentCard() > shoe.getCutCard()) {
 			shoe.setUpShoe(numDecks);
 		}
-//		boolean dealerBlackjack = false;
-//		playRouundMakeBets(minBet);
-//		deal();
-//		if(dealer.getUpCards().contains("Ace")) {
-//			int[] insurance = dealer.offerInsurance(players);
-//			if(dealer.getHidden().getValue() == 10) {
-//				dealerBlackjack = true;
-//				for(int i = 0; i < insurance.length; i++) {
-//					players.get(i).setMoeny(players.get(i).getMoney() + insurance[i] * 2);
-//				}
-//			} else {
-//				for(int i = 0; i < insurance.length; i++) {
-//					dealer.collectBet(insurance[i]);
-//				}
-//			}
-//		} 
-//		if(!dealerBlackjack) {
-//			for(int i = 0; i < players.size(); i++) {
-//				for(int k = 0; k < players.get(i).getHands().size(); k++) {
-//					players.get(i).playerDecision(dealer.getUpCards(), players.get(i).getHand(k), shoe);
-//				}
-//			}
-//		} 
-//		dealer.flipHidden();
-//		playRoundDetermineWinnersAndPay();
 	}
 	
 	public void determineWinners() {
@@ -148,14 +123,16 @@ public class Blackjack {
 						dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2);
 						roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
 					}
+				} else if(bust(players.get(i).getHand(k))) {
+					
 				} else {
 					if(checkBlackjack(players.get(i).getHand(k))) {
 						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5));
 						roundEarnings += players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5);
-					} else if(dealer.getUpCards().handTotal() == players.get(i).getHand(k).handTotal()) {
+					} else if(dealer.getUpCards().handTotal() == players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
 						dealer.dispenseWinnings(players.get(i).getHand(k).getBet());
 						roundEarnings += players.get(i).getHand(k).getBet();
-					} else if(dealer.getUpCards().handTotal() < players.get(i).getHand(k).handTotal()) {
+					} else if(dealer.getUpCards().handTotal() < players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
 						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() * 2);
 						roundEarnings += players.get(i).getHand(k).getBet() * 2;
 					}
