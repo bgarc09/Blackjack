@@ -798,6 +798,14 @@ public class Player {
 		}
 	}
 	
+	public CardHand removeHand(int index) {
+		return(hands.remove(index));
+	}
+	
+	public void removeHands() {
+		hands = new ArrayList<CardHand>();
+	}
+	
 	public void setHands(ArrayList<CardHand> hands) {
 		this.hands = hands;
 	}

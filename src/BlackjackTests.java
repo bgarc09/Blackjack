@@ -91,6 +91,12 @@ public class BlackjackTests {
 		}
 	}
 	
+	@Test
+	public void testPlayRound() {
+		Blackjack blackjack = blackjackSetUp();
+		blackjack.playRound(10);
+	}
+	
 	//Card Tests
 	@Test
 	public void testEqualCard1() {

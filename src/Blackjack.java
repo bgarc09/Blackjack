@@ -56,6 +56,43 @@ public class Blackjack {
 		dealer.getUpCards().addCard(shoe.removeFirst());
 	}
 	
+	public void determineWinners() {
+		for(int i = 0; i < players.size(); i++) {
+			for(int k = 0; k < players.get(i).getHands().size(); k++) {
+				int roundEarnings = 0;
+				if(checkBlackjack(dealer.getUpCards())) {
+					if(checkBlackjack(players.get(i).getHand(k))) {
+						dealer.dispenseWinnings(players.get(i).getHand(k).getBet());
+						dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2);
+						roundEarnings += players.get(i).getHand(k).getBet();
+						roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
+					} else {
+						dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2);
+						roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
+					}
+				} else {
+					if(checkBlackjack(players.get(i).getHand(k))) {
+						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5));
+						roundEarnings += players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5);
+					} else if(dealer.getUpCards().handTotal() == players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
+						dealer.dispenseWinnings(players.get(i).getHand(k).getBet());
+						roundEarnings += players.get(i).getHand(k).getBet();
+					} else if(dealer.getUpCards().handTotal() < players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
+						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() * 2);
+						roundEarnings += players.get(i).getHand(k).getBet() * 2;
+					}
+				}
+				if(roundEarnings > 0) {
+					players.get(i).setConsecutiveWins(players.get(i).getConsecutiveWins() + 1);
+				} else {
+					players.get(i).setConsecutiveWins(0);
+				}
+				players.get(i).setLastHandWinnings(roundEarnings);
+				players.get(i).updateMaxMoney();
+			}
+		}
+	}
+	
 	public House getDealer() {
 		return dealer;
 	}
@@ -103,81 +140,20 @@ public class Blackjack {
 			}
 		}
 		dealer.flipHidden();
+		//dealer strategy
 		determineWinners();
 		if(shoe.getCurrentCard() > shoe.getCutCard()) {
 			shoe.setUpShoe(numDecks);
 		}
+		removeHands();
 	}
 	
-	public void determineWinners() {
+	public void removeHands() {
 		for(int i = 0; i < players.size(); i++) {
-			for(int k = 0; k < players.get(i).getHands().size(); k++) {
-				int roundEarnings = 0;
-				if(checkBlackjack(dealer.getUpCards())) {
-					if(checkBlackjack(players.get(i).getHand(k))) {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getBet());
-						dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2);
-						roundEarnings += players.get(i).getHand(k).getBet();
-						roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
-					} else {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2);
-						roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
-					}
-				} else {
-					if(checkBlackjack(players.get(i).getHand(k))) {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5));
-						roundEarnings += players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5);
-					} else if(dealer.getUpCards().handTotal() == players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getBet());
-						roundEarnings += players.get(i).getHand(k).getBet();
-					} else if(dealer.getUpCards().handTotal() < players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() * 2);
-						roundEarnings += players.get(i).getHand(k).getBet() * 2;
-					}
-				}
-				if(roundEarnings > 0) {
-					players.get(i).setConsecutiveWins(players.get(i).getConsecutiveWins() + 1);
-				} else {
-					players.get(i).setConsecutiveWins(0);
-				}
-				players.get(i).setLastHandWinnings(roundEarnings);
-				players.get(i).updateMaxMoney();
-			}
+			players.get(i).removeHands();
 		}
+		dealer.setUpCards(new CardHand());
 	}
-	
-//	public void playRoundDetermineWinnersAndPay() {
-//		for(int i = 0; i < players.size(); i++) {
-//			for(int k = 0; k < players.get(i).getHands().size(); k++) {
-//				if(bust(dealer.getUpCards())) {
-//					if(!bust(players.get(i).getHand(k))) {
-//						players.get(i).collectWinnings(players.get(i).getCurrentBet() * 2);
-//						players.get(i).setConsecutiveWins((players.get(i).getConsecutiveWins() + 1) % players.get(i).getLetItRide());
-//					} else {
-//						players.get(i).setConsecutiveWins(0);
-//						players.get(i).setLastHandWinnings(0);
-//					}
-//				} else {
-//					if(!bust(players.get(i).getHand(k))) {
-//						if(players.get(i).getHand(k).handTotal() > dealer.handTotal()) {
-//							players.get(i).collectWinnings(players.get(i).getCurrentBet() * 2);
-//							players.get(i).setConsecutiveWins((players.get(i).getConsecutiveWins() + 1) % players.get(i).getLetItRide());
-//						} else if(players.get(i).getHand(i).handTotal() == dealer.handTotal()) {
-//							players.get(i).collectWinnings(players.get(i).getCurrentBet());
-//							players.get(i).setConsecutiveWins(0);
-//						} else {
-//							players.get(i).setConsecutiveWins(0);
-//							players.get(i).setLastHandWinnings(0);
-//						}
-//					} else {
-//						players.get(i).setConsecutiveWins(0);
-//						players.get(i).setLastHandWinnings(0);
-//					}
-//				}
-//			}
-//			players.get(i).updateMaxMoney();
-//		}
-//	}
 	
 	public void setDealer(House dealer) {
 		this.dealer = dealer;
