@@ -362,7 +362,14 @@ public class BlackjackTests {
 	
 	@Test
 	public void testDetermineBet() {
-		
+		Player p = new Player(100, 3);
+		assertEquals(10, p.determineBet(10));
+		p.setConsecutiveWins(2);
+		p.setLastHandWinnings(20);
+		assertEquals(20, p.determineBet(10));
+		p.setConsecutiveWins(3);
+		p.setLastHandWinnings(40);
+		assertEquals(10, p.determineBet(10));
 	}
 	
 	@Test

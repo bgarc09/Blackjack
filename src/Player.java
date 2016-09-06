@@ -12,7 +12,9 @@ public class Player {
 	
 	public Player(int money, int letItRide) {
 		this.money = money;
+		lastHandWinnings = 0;
 		this.letItRide = letItRide;
+		consecutiveWins = 0;
 		hands = new ArrayList<CardHand>();
 	}
 	
