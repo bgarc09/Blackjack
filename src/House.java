@@ -15,6 +15,19 @@ public class House {
 		winnings += amount;
 	}
 	
+	public void dealerStrategy(Shoe s) {
+		boolean complete = false;
+		while(!complete) {
+			if(upCards.handTotal() < 17) {
+				upCards.addCard(s.removeFirst());
+			} else if(upCards.contains("Ace") && upCards.hardHandTotal() == 7) {
+				upCards.addCard(s.removeFirst());
+			} else {
+				complete = true;
+			}
+		}
+	}
+	
 	public void dispenseWinnings(int amount) {
 		winnings -= amount;
 	}

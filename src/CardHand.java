@@ -207,6 +207,14 @@ public class CardHand {
 		return total;
 	}
 	
+	public int hardHandTotal() {
+		int total = 0;
+		for(int i = 0; i < cards.size(); i++) {
+			total = cards.get(i).getValue();
+		}
+		return(total);
+	}
+	
 	public int numCards() {
 		return cards.size();
 	}
