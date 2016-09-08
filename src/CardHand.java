@@ -210,7 +210,7 @@ public class CardHand {
 	public int hardHandTotal() {
 		int total = 0;
 		for(int i = 0; i < cards.size(); i++) {
-			total = cards.get(i).getValue();
+			total += cards.get(i).getValue();
 		}
 		return(total);
 	}

@@ -251,6 +251,14 @@ public class BlackjackTests {
 	}
 	
 	@Test
+	public void hardHandTotal() {
+		CardHand hand = new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1));
+		assertEquals(2, hand.hardHandTotal());
+		hand.addCard(new Card("Diamond", "Queen", 10));
+		assertEquals(12, hand.hardHandTotal());
+	}
+	
+	@Test
 	public void testRemoveCard() {
 		CardHand hand = new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1));
 		hand.remove(0);

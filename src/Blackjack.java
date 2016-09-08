@@ -140,11 +140,11 @@ public class Blackjack {
 			}
 		}
 		dealer.flipHidden();
-		//dealer strategy
 		dealer.dealerStrategy(shoe);
 		determineWinners();
 		if(shoe.getCurrentCard() > shoe.getCutCard()) {
 			shoe.setUpShoe(numDecks);
+			shoe.setCurrentCard(0);
 		}
 		removeHands();
 	}
