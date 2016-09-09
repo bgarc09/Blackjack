@@ -1,9 +1,6 @@
 import static org.junit.Assert.*;
-
 import java.util.ArrayList;
-
 import org.junit.Test;
-
 
 public class BlackjackTests {
 
@@ -95,6 +92,16 @@ public class BlackjackTests {
 	public void testPlayRound() {
 		Blackjack blackjack = blackjackSetUp();
 		blackjack.playRound(10);
+	}
+	
+	@Test
+	public void testRemoveHands() {
+		Blackjack blackjack = blackjackSetUp();
+		blackjack.deal();
+		blackjack.removeHands();
+		for(int i = 0; i < blackjack.getPlayers().size(); i++) {
+			assertEquals(0, blackjack.getPlayers().get(i).getHands().size());
+		}
 	}
 	
 	//Card Tests
@@ -289,6 +296,42 @@ public class BlackjackTests {
 	}
 	
 	@Test
+	public void testDealerStrategy1() {
+		House dealer = new House();
+		dealer.setUpCards(new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Six", 6)));
+		Shoe s = new Shoe(4);
+		dealer.dealerStrategy(s);
+		assertTrue(dealer.getUpCards().getCards().size() >= 3);
+	}
+	
+	@Test
+	public void testDealerStrategy2() {
+		House dealer = new House();
+		dealer.setUpCards(new CardHand(new Card("Spade", "Queen", 10), new Card("Heart", "Six", 6)));
+		Shoe s = new Shoe(4);
+		dealer.dealerStrategy(s);
+		assertEquals(3, dealer.getUpCards().getCards().size());
+	}
+	
+	@Test
+	public void testDealerStrategy3() {
+		House dealer = new House();
+		dealer.setUpCards(new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Seven", 7)));
+		Shoe s = new Shoe(4);
+		dealer.dealerStrategy(s);
+		assertEquals(2, dealer.getUpCards().getCards().size());
+	}
+	
+	@Test
+	public void testDealerStrategy4() {
+		House dealer = new House();
+		dealer.setUpCards(new CardHand(new Card("Spade", "King", 10), new Card("Heart", "Seven", 7)));
+		Shoe s = new Shoe(4);
+		dealer.dealerStrategy(s);
+		assertEquals(2, dealer.getUpCards().getCards().size());
+	}
+	
+	@Test
 	public void testDispenseWinnings1() {
 		House dealer = new House();
 		dealer.dispenseWinnings(50);
@@ -399,22 +442,22 @@ public class BlackjackTests {
 	@Test
 	public void testDoubleDown1() {
 		Player p = new Player(100);
+		Shoe shoe = new Shoe(4);
 		p.bet(10);
 		CardHand hand = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2), 10);
-		assertTrue(p.doubleDown(hand, new Card("Heart", "King", 10)));
+		assertTrue(p.doubleDown(hand, shoe));
 		assertEquals(80, p.getMoney());
 		assertEquals(20, hand.getBet());
 		assertEquals(3, hand.getCards().size());
-		CardHand result = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2), new Card("Heart", "King", 10) );
-		assertTrue(hand.equals(result));
 	}
 	
 	@Test
 	public void testDoubleDown2() {
 		Player p = new Player(100);
+		Shoe shoe = new Shoe(4);
 		p.bet(60);
 		CardHand hand = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2), 60);
-		assertFalse(p.doubleDown(hand, new Card("Heart", "King", 10)));
+		assertFalse(p.doubleDown(hand, shoe));
 		assertEquals(40, p.getMoney());
 		assertEquals(60, hand.getBet());
 		assertEquals(2, hand.getCards().size());
@@ -442,11 +485,12 @@ public class BlackjackTests {
 	
 	public void testSplit1() {
 		Player p = new Player(100);
+		Shoe shoe = new Shoe(4);
 		p.bet(30);
 		assertEquals(70, p.getMoney());
 		CardHand hand = new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1), 30);
 		p.addHand(hand);
-		p.split(p.getHand(0), new Card("Heart", "Nine", 9), new Card("Club", "Eight", 8));
+		p.split(p.getHand(0), shoe);
 		assertEquals(40, p.getMoney());
 		assertEquals(p.getHand(0), new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Nine", 9)));
 		assertEquals(p.getHand(1), new CardHand(new Card("Heart", "Ace", 1), new Card("Club", "Eight", 8)));
@@ -454,11 +498,12 @@ public class BlackjackTests {
 	
 	public void testSplit2() {
 		Player p = new Player(100);
+		Shoe shoe = new Shoe(4);
 		p.bet(60);
 		assertEquals(70, p.getMoney());
 		CardHand hand = new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1), 30);
 		p.addHand(hand);
-		p.split(p.getHand(0), new Card("Heart", "Nine", 9), new Card("Club", "Eight", 8));
+		p.split(p.getHand(0), shoe);
 		assertEquals(p.getHand(0), new CardHand(new Card("Spade", "Ace", 1), new Card("Heart", "Ace", 1)));
 		assertEquals(40, p.getMoney());
 	}

@@ -111,16 +111,23 @@ public class Blackjack {
 		int counter = 0;
 		while(players.size() > 0) {
 			playRound(minBet);
+			for(int i = 0; i < players.size(); i++) {
+				System.out.println("Player " + i + ": " +players.get(i).getMoney());
+			}
 			counter++;
 		}
 		System.out.println("Num Rounds: " + counter);
 	}
 	
 	public void playGameNumRounds(int numRounds, int minBet) {
-		for(int i = 0; i < players.size(); i++) {
+		for(int round = 0; round < numRounds; round++) {
 			playRound(minBet);
-			System.out.println("Player " + i + ": " +players.get(i).getMoney());
+			System.out.println("Round " + round);
+			for(int i = 0; i < players.size(); i++) {
+				System.out.println("Player " + i + ": " +players.get(i).getMoney());
+			}
 		}
+		
 	}
 	
 	/**
