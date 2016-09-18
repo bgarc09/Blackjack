@@ -9,24 +9,27 @@ public class Player {
 	private int letItRide;
 	private int consecutiveWins;
 	private int maxMoney;
+	private String name;
+	private boolean out = false;
 	
-	public Player(int money, int letItRide) {
+	public Player(String name, int money, int letItRide) {
+		this.name = name;
 		this.money = money;
+		maxMoney = money;
 		lastHandWinnings = 0;
 		this.letItRide = letItRide;
 		consecutiveWins = 0;
 		hands = new ArrayList<CardHand>();
 	}
 	
-	public Player(int money) {
-		this(money, 3);
+	public Player(String name, int money) {
+		this(name, money, 3);
 	}
 	
 	public void addHand(CardHand newHand) {
 		hands.add(newHand);
 	}
 	
-	//testing purposes
 	public boolean bet(int amount) {
 		if(amount <= money) {
 			money -= amount;
@@ -116,13 +119,21 @@ public class Player {
 		return money;
 	}
 	
+	public String getName(){
+		return(name);
+	}
+	
+	public boolean getOut() {
+		return(out);
+	}
+	
 	public void hit(CardHand hand, Card card) {
 		hand.addCard(card);
 	}
 	
 	public void insuranceDecision(CardHand hand) {
 		if(hand.handTotal() == 21) {
-			this.takeInsurance(hand, hand.getBet() / 2);
+			takeInsurance(hand, hand.getBet() / 2);
 		}
 	}
 	
@@ -890,6 +901,14 @@ public class Player {
 	
 	public void setMoeny(int money) {
 		this.money = money;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setOut(boolean out) {
+		this.out = out;
 	}
 	
 	public boolean split(CardHand hand, Shoe s) {

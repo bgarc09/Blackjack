@@ -14,6 +14,15 @@ public class Blackjack {
 		this.shoe = new Shoe(numDecks);
 	}
 	
+	public boolean allPlayersOut() {
+		for(int i = 0; i < players.size(); i++) {
+			if(!players.get(i).getOut()) {
+				return(false);
+			}
+		}
+		return(true);
+	}
+	
 	/**
 	 * 
 	 * @param hand
@@ -37,7 +46,7 @@ public class Blackjack {
 	public void cutPlayers(int minBet) {
 		for(int i = 0; i < players.size(); i++) {
 			if(players.get(i).getMoney() < minBet) {
-				players.remove(i);
+				players.get(i).setOut(true);
 			}
 		}
 	}
@@ -47,48 +56,64 @@ public class Blackjack {
 	 */
 	public void deal() {
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).addHand(new CardHand(players.get(i).getCurrentBet(), shoe.removeFirst()));
+			if(!players.get(i).getOut()) {
+				players.get(i).addHand(new CardHand(players.get(i).getCurrentBet(), shoe.removeFirst()));
+			}
 		}
 		dealer.setHidden(shoe.removeFirst());
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).getHand(0).addCard(shoe.removeFirst());
+			if(!players.get(i).getOut()) {
+				players.get(i).getHand(0).addCard(shoe.removeFirst());
+			}
 		}
 		dealer.getUpCards().addCard(shoe.removeFirst());
 	}
 	
 	public void determineWinners() {
 		for(int i = 0; i < players.size(); i++) {
-			for(int k = 0; k < players.get(i).getHands().size(); k++) {
-				int roundEarnings = 0;
-				if(checkBlackjack(dealer.getUpCards())) {
-					if(checkBlackjack(players.get(i).getHand(k))) {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getBet());
-						dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2);
-						roundEarnings += players.get(i).getHand(k).getBet();
-						roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
+			if(!players.get(i).getOut()) {
+				for(int k = 0; k < players.get(i).getHands().size(); k++) {
+					int roundEarnings = 0;
+					dealer.collectBet(players.get(i).getHand(k).getBet());
+					dealer.collectBet(players.get(i).getHand(k).getInsurance());
+					if(checkBlackjack(dealer.getUpCards())) {
+						System.out.println("################");
+						if(checkBlackjack(players.get(i).getHand(k))) {
+							//dealer.collectBet(players.get(i).getHand(k).getBet());
+							//dealer.collectBet(players.get(i).getHand(k).getInsurance());
+							dealer.dispenseWinnings(players.get(i).getHand(k).getBet(), players.get(i));
+							dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2, players.get(i));
+							roundEarnings += players.get(i).getHand(k).getBet();
+							roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
+						} else {
+							System.out.println("888888888888888");
+							//dealer.collectBet(players.get(i).getHand(k).getBet());
+							//dealer.collectBet(players.get(i).getHand(k).getInsurance());
+							dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2, players.get(i));
+							roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
+						}
 					} else {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2);
-						roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
+						if(checkBlackjack(players.get(i).getHand(k))) {
+							//dealer.collectBet(players.get(i).getHand(k).getBet());
+							dealer.dispenseWinnings(players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5), players.get(i));
+							roundEarnings += players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5);
+						} else if(dealer.getUpCards().handTotal() == players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
+							//dealer.collectBet(players.get(i).getHand(k).getBet());
+							dealer.dispenseWinnings(players.get(i).getHand(k).getBet(), players.get(i));
+							roundEarnings += players.get(i).getHand(k).getBet();
+						} else if(dealer.getUpCards().handTotal() < players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
+							dealer.dispenseWinnings(players.get(i).getHand(k).getBet() * 2, players.get(i));
+							roundEarnings += players.get(i).getHand(k).getBet() * 2;
+						}
 					}
-				} else {
-					if(checkBlackjack(players.get(i).getHand(k))) {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5));
-						roundEarnings += players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5);
-					} else if(dealer.getUpCards().handTotal() == players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getBet());
-						roundEarnings += players.get(i).getHand(k).getBet();
-					} else if(dealer.getUpCards().handTotal() < players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
-						dealer.dispenseWinnings(players.get(i).getHand(k).getBet() * 2);
-						roundEarnings += players.get(i).getHand(k).getBet() * 2;
+					if(roundEarnings > 0) {
+						players.get(i).setConsecutiveWins(players.get(i).getConsecutiveWins() + 1);
+					} else {
+						players.get(i).setConsecutiveWins(0);
 					}
+					players.get(i).setLastHandWinnings(roundEarnings);
+					players.get(i).updateMaxMoney();
 				}
-				if(roundEarnings > 0) {
-					players.get(i).setConsecutiveWins(players.get(i).getConsecutiveWins() + 1);
-				} else {
-					players.get(i).setConsecutiveWins(0);
-				}
-				players.get(i).setLastHandWinnings(roundEarnings);
-				players.get(i).updateMaxMoney();
 			}
 		}
 	}
@@ -103,13 +128,15 @@ public class Blackjack {
 	
 	public void makeBets(int minBet) {
 		for(int i = 0; i < players.size(); i++) {
-			dealer.collectBet(players.get(i).determineBet(minBet));
+			if(!players.get(i).getOut()) {
+				dealer.collectBet(players.get(i).determineBet(minBet));
+			}
 		}
 	}
 	
 	public void playGameTilPlayersBroke(int minBet) {
 		int counter = 0;
-		while(players.size() > 0) {
+		while(!allPlayersOut()) {
 			playRound(minBet);
 			for(int i = 0; i < players.size(); i++) {
 				System.out.println("Player " + i + ": " +players.get(i).getMoney());
@@ -142,8 +169,10 @@ public class Blackjack {
 			dealer.offerInsurance(players);
 		}
 		for(int i = 0; i < players.size(); i++) {
-			for(int k = 0; k < players.get(i).getHands().size(); k++) {
-				players.get(i).playerDecision(dealer.getUpCards(), players.get(i).getHand(k), shoe);
+			if(!players.get(i).getOut()) {
+				for(int k = 0; k < players.get(i).getHands().size(); k++) {
+					players.get(i).playerDecision(dealer.getUpCards(), players.get(i).getHand(k), shoe);
+				}
 			}
 		}
 		dealer.flipHidden();
@@ -158,7 +187,9 @@ public class Blackjack {
 	
 	public void removeHands() {
 		for(int i = 0; i < players.size(); i++) {
-			players.get(i).removeHands();
+			if(!players.get(i).getOut()) {
+				players.get(i).removeHands();
+			}
 		}
 		dealer.setUpCards(new CardHand());
 	}

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class CardHand {
 	
 	private ArrayList<Card> cards;
-	private int bet;
+	private int bet = 0;
 	private int insurance = 0;
 	
 	public CardHand() {
@@ -17,10 +17,8 @@ public class CardHand {
 	}
 	
 	public CardHand(Card a, Card b, int bet) {
-		cards = new ArrayList<Card>();
-		cards.add(a);
-		cards.add(b);
-		this.bet = bet;
+		this(a, b);
+		setBet(bet);
 	}
 	
 	public CardHand(Card a) {
@@ -29,9 +27,8 @@ public class CardHand {
 	}
 	
 	public CardHand(Card a, int bet) {
-		cards = new ArrayList<Card>();
-		cards.add(a);
-		this.bet = bet;
+		this(a);
+		setBet(bet);
 	}
 	
 	public CardHand(Card...c) {
@@ -42,11 +39,8 @@ public class CardHand {
 	}
 	
 	public CardHand(int bet, Card...c) {
-		this.cards = new ArrayList<Card>();
-		for(int i = 0; i < c.length; i++) {
-			cards.add(c[i]);
-		}
-		this.bet = bet;
+		this(c);
+		setBet(bet);
 	}
 	
 	public CardHand(CardHand cards, Card c) {
@@ -58,12 +52,8 @@ public class CardHand {
 	}
 	
 	public CardHand(CardHand cards, Card c, int bet) {
-		this.cards = new ArrayList<Card>();
-		for(int i = 0; i < cards.getCards().size(); i++) {
-			this.cards.add(cards.getCards().get(i));
-		}
-		this.cards.add(c);
-		this.bet = bet;
+		this(cards, c);
+		setBet(bet);
 	}
 	
 	public CardHand(CardHand cards, Card...c) {
@@ -77,14 +67,8 @@ public class CardHand {
 	}
 	
 	public CardHand(CardHand cards, int bet, Card...c) {
-		this.cards = new ArrayList<Card>();
-		for(int i = 0; i < cards.getCards().size(); i++) {
-			this.cards.add(cards.getCards().get(i));
-		}
-		for(int i = 0; i < c.length; i++) {
-			this.cards.add(c[i]);
-		}
-		this.bet = bet;
+		this(cards, c);
+		setBet(bet);
 	}
 	
 	public void addCard(Card card) {

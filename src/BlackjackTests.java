@@ -7,13 +7,13 @@ public class BlackjackTests {
 	//Set Up
 	public ArrayList<Player> playersSetUp() {
 		ArrayList<Player> players = new ArrayList<Player>();
-		Player a = new Player(100);
+		Player a = new Player("", 100);
 		a.addHand(new CardHand(new Card("Spade", "Ace", 1), new Card("Spade", "King", 10)));
 		players.add(a);
-		Player b = new Player(100);
+		Player b = new Player("", 100);
 		b.addHand(new CardHand(new Card("Spade", "Five", 5), new Card("Spade", "Four", 4)));
 		players.add(b);
-		Player c = new Player(100);
+		Player c = new Player("", 100);
 		c.addHand(new CardHand(new Card("Spade", "Ace", 1), new Card("Spade", "Nine", 9)));
 		players.add(c);
 		return(players);
@@ -21,17 +21,35 @@ public class BlackjackTests {
 	//Blackjack Tests
 	public Blackjack blackjackSetUp() {
 		ArrayList<Player> players = new ArrayList<Player>();
-		Player a = new Player(100);
+		Player a = new Player("", 100);
 		players.add(a);
-		Player b = new Player(100);
+		Player b = new Player("", 100);
 		players.add(b);
-		Player c = new Player(100);
+		Player c = new Player("", 100);
 		players.add(c);
-		Player d = new Player(100);
+		Player d = new Player("", 100);
 		players.add(d);
 		House dealer = new House();
 		Blackjack result = new Blackjack(dealer, players, 4);
 		return(result);
+	}
+	
+	public Blackjack blackjackSetUpSmaller() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		Player a = new Player("", 100);
+		players.add(a);
+		House dealer = new House();
+		Blackjack result = new Blackjack(dealer, players, 4);
+		return(result);
+	}
+	
+	@Test
+	public void testAllPlayersOut() {
+		Blackjack blackjack = blackjackSetUp();
+		blackjack.cutPlayers(50);
+		assertFalse(blackjack.allPlayersOut());
+		blackjack.cutPlayers(200);
+		assertTrue(blackjack.allPlayersOut());
 	}
 	
 	@Test
@@ -66,7 +84,10 @@ public class BlackjackTests {
 		assertEquals(4, blackjack.getPlayers().size());
 		blackjack.getPlayers().get(0).bet(45);
 		blackjack.cutPlayers(10);
-		assertEquals(3, blackjack.getPlayers().size());
+		assertTrue(blackjack.getPlayers().get(0).getOut());
+		for(int i = 1; i < blackjack.getPlayers().size(); i++) {
+			assertFalse(blackjack.getPlayers().get(i).getOut());
+		}
 	}
 	
 	@Test
@@ -76,6 +97,99 @@ public class BlackjackTests {
 		for(int i = 0; i < blackjack.getPlayers().size(); i++) {
 			assertEquals(2, blackjack.getPlayers().get(i).getHand(0).getCards().size());
 		}
+	}
+	
+	@Test
+	public void testDetermineWinners1() {
+		Blackjack blackjack = blackjackSetUpSmaller();
+		blackjack.getPlayers().get(0).bet(10);
+		blackjack.getDealer().setUpCards(new CardHand(new Card("Spade", "Ace", 1), new Card("Spade", "King", 10)));
+		blackjack.getPlayers().get(0).addHand(new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "King", 10), 10));
+		blackjack.getPlayers().get(0).takeInsurance(blackjack.getPlayers().get(0).getHand(0), 0);
+		assertEquals(10, blackjack.getPlayers().get(0).getHand(0).getBet());
+		blackjack.determineWinners();
+		assertEquals(90, blackjack.getPlayers().get(0).getMoney());
+		assertEquals(10, blackjack.getDealer().getWinnings());
+	}
+	
+	@Test
+	public void testDetermineWinners2() {
+		Blackjack blackjack = blackjackSetUpSmaller();
+		blackjack.getPlayers().get(0).bet(10);
+		blackjack.getDealer().setUpCards(new CardHand(new Card("Spade", "Ace", 1), new Card("Spade", "King", 10)));
+		blackjack.getPlayers().get(0).addHand(new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "King", 10), 10));
+		blackjack.getPlayers().get(0).takeInsurance(blackjack.getPlayers().get(0).getHand(0), 5);
+		blackjack.determineWinners();
+		assertEquals(95, blackjack.getPlayers().get(0).getMoney());
+		assertEquals(5, blackjack.getDealer().getWinnings());
+	}
+	
+	@Test
+	public void testDetermineWinners3() {
+		Blackjack blackjack = blackjackSetUpSmaller();
+		blackjack.getPlayers().get(0).bet(10);
+		blackjack.getDealer().setUpCards(new CardHand(new Card("Spade", "Ace", 1), new Card("Spade", "King", 10)));
+		blackjack.getPlayers().get(0).addHand(new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "Ace", 1), 10));
+		blackjack.getPlayers().get(0).takeInsurance(blackjack.getPlayers().get(0).getHand(0), 5);
+		blackjack.determineWinners();
+		assertEquals(105, blackjack.getPlayers().get(0).getMoney());
+		assertEquals(-5, blackjack.getDealer().getWinnings());
+	}
+	
+	@Test
+	public void testDetermineWinners4() {
+		Blackjack blackjack = blackjackSetUpSmaller();
+		blackjack.getPlayers().get(0).bet(10);
+		blackjack.getDealer().setUpCards(new CardHand(new Card("Spade", "Ace", 1), new Card("Spade", "King", 10)));
+		blackjack.getPlayers().get(0).addHand(new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "Ace", 1), 10));
+		blackjack.getPlayers().get(0).takeInsurance(blackjack.getPlayers().get(0).getHand(0), 0);
+		blackjack.determineWinners();
+		assertEquals(100, blackjack.getPlayers().get(0).getMoney());
+		assertEquals(0, blackjack.getDealer().getWinnings());
+	}
+	
+	@Test
+	public void testDetermineWinners5() {
+		Blackjack blackjack = blackjackSetUpSmaller();
+		blackjack.getPlayers().get(0).bet(10);
+		blackjack.getDealer().setUpCards(new CardHand(new Card("Spade", "King", 10), new Card("Spade", "King", 10)));
+		blackjack.getPlayers().get(0).addHand(new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "Ace", 1), 10));
+		blackjack.determineWinners();
+		assertEquals(115, blackjack.getPlayers().get(0).getMoney());
+		assertEquals(-15, blackjack.getDealer().getWinnings());
+	}
+	
+	@Test
+	public void testDetermineWinners6() {
+		Blackjack blackjack = blackjackSetUpSmaller();
+		blackjack.getPlayers().get(0).bet(10);
+		blackjack.getDealer().setUpCards(new CardHand(new Card("Spade", "King", 10), new Card("Spade", "King", 10)));
+		blackjack.getPlayers().get(0).addHand(new CardHand(new Card("Spade", "Ten", 10), new Card("Spade", "King", 10), 10));
+		blackjack.determineWinners();
+		assertEquals(100, blackjack.getPlayers().get(0).getMoney());
+		assertEquals(0, blackjack.getDealer().getWinnings());
+	}
+	
+	@Test
+	public void testDetermineWinners7() {
+		Blackjack blackjack = blackjackSetUpSmaller();
+		blackjack.getPlayers().get(0).bet(10);
+		blackjack.getDealer().setUpCards(new CardHand(new Card("Spade", "King", 10), new Card("Spade", "King", 10)));
+		blackjack.getPlayers().get(0).addHand(new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "King", 10), 10));
+		blackjack.determineWinners();
+		assertEquals(90, blackjack.getPlayers().get(0).getMoney());
+		assertEquals(10, blackjack.getDealer().getWinnings());
+	}
+	
+	@Test
+	public void testDetermineWinners8() {
+		Blackjack blackjack = blackjackSetUpSmaller();
+		blackjack.getPlayers().get(0).bet(10);
+		blackjack.getDealer().setUpCards(new CardHand(new Card("Spade", "King", 10), new Card("Spade", "King", 10)));
+		blackjack.getPlayers().get(0).addHand(new CardHand(10, new Card("Spade", "Nine", 9), new Card("Spade", "King", 10), new Card("Spade", "Three", 3)));
+		blackjack.determineWinners();
+		assertEquals(90, blackjack.getPlayers().get(0).getMoney());
+		assertEquals(10, blackjack.getDealer().getWinnings());
 	}
 	
 	@Test
@@ -334,11 +448,14 @@ public class BlackjackTests {
 	@Test
 	public void testDispenseWinnings1() {
 		House dealer = new House();
-		dealer.dispenseWinnings(50);
+		Player p = new Player("", 0);
+		dealer.dispenseWinnings(50, p);
+		assertEquals(50, p.getMoney());
 		assertEquals(-50, dealer.getWinnings());
 		dealer.collectBet(100);
 		assertEquals(50, dealer.getWinnings());
-		dealer.dispenseWinnings(45);
+		dealer.dispenseWinnings(45, p);
+		assertEquals(95, p.getMoney());
 		assertEquals(5, dealer.getWinnings());
 	}
 	
@@ -396,7 +513,7 @@ public class BlackjackTests {
 	//Player Tests
 	@Test
 	public void testAddHand1() {
-		Player p = new Player(100);
+		Player p = new Player("", 100);
 		assertEquals(0, p.getHands().size());
 		p.addHand(new CardHand());
 		assertEquals(1, p.getHands().size());
@@ -405,7 +522,7 @@ public class BlackjackTests {
 	}
 	
 	public void testBet1() {
-		Player p = new Player(100);
+		Player p = new Player("", 100);
 		assertTrue(p.bet(25));
 		assertEquals(75, p.getMaxMoney());
 		assertFalse(p.bet(100));
@@ -420,7 +537,7 @@ public class BlackjackTests {
 	
 	@Test
 	public void testCollectWinnings1() {
-		Player p = new Player(100);
+		Player p = new Player("", 100);
 		p.collectWinnings(100);
 		assertEquals(200, p.getMoney());
 		p.collectWinnings(0);
@@ -429,7 +546,7 @@ public class BlackjackTests {
 	
 	@Test
 	public void testDetermineBet() {
-		Player p = new Player(100, 3);
+		Player p = new Player("", 100, 3);
 		assertEquals(10, p.determineBet(10));
 		p.setConsecutiveWins(2);
 		p.setLastHandWinnings(20);
@@ -441,7 +558,7 @@ public class BlackjackTests {
 	
 	@Test
 	public void testDoubleDown1() {
-		Player p = new Player(100);
+		Player p = new Player("", 100);
 		Shoe shoe = new Shoe(4);
 		p.bet(10);
 		CardHand hand = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2), 10);
@@ -453,7 +570,7 @@ public class BlackjackTests {
 	
 	@Test
 	public void testDoubleDown2() {
-		Player p = new Player(100);
+		Player p = new Player("", 100);
 		Shoe shoe = new Shoe(4);
 		p.bet(60);
 		CardHand hand = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2), 60);
@@ -467,7 +584,7 @@ public class BlackjackTests {
 	
 	@Test
 	public void testHit1() {
-		Player p = new Player(100);
+		Player p = new Player("", 100);
 		CardHand hand = new CardHand(new Card("Spade", "Nine", 9), new Card("Spade", "Two", 2));
 		p.addHand(hand);
 		p.hit(p.getHand(0), new Card("Heart", "King", 10));
@@ -484,7 +601,7 @@ public class BlackjackTests {
 	}
 	
 	public void testSplit1() {
-		Player p = new Player(100);
+		Player p = new Player("", 100);
 		Shoe shoe = new Shoe(4);
 		p.bet(30);
 		assertEquals(70, p.getMoney());
@@ -497,7 +614,7 @@ public class BlackjackTests {
 	}
 	
 	public void testSplit2() {
-		Player p = new Player(100);
+		Player p = new Player("", 100);
 		Shoe shoe = new Shoe(4);
 		p.bet(60);
 		assertEquals(70, p.getMoney());

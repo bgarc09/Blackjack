@@ -28,8 +28,9 @@ public class House {
 		}
 	}
 	
-	public void dispenseWinnings(int amount) {
+	public void dispenseWinnings(int amount, Player p) {
 		winnings -= amount;
+		p.collectWinnings(amount);
 	}
 	
 	public void flipHidden() {
@@ -60,8 +61,10 @@ public class House {
 	
 	public void offerInsurance(ArrayList<Player> players) {
 		for(int i = 0; i < players.size(); i++) {
-			for(int k = 0; k < players.get(i).getHands().size(); k++) {
-				players.get(i).insuranceDecision(players.get(i).getHand(k));
+			if(!players.get(i).getOut()) {
+				for(int k = 0; k < players.get(i).getHands().size(); k++) {
+					players.get(i).insuranceDecision(players.get(i).getHand(k));
+				}
 			}
 		}
 	}
