@@ -77,28 +77,20 @@ public class Blackjack {
 					dealer.collectBet(players.get(i).getHand(k).getBet());
 					dealer.collectBet(players.get(i).getHand(k).getInsurance());
 					if(checkBlackjack(dealer.getUpCards())) {
-						System.out.println("################");
 						if(checkBlackjack(players.get(i).getHand(k))) {
-							//dealer.collectBet(players.get(i).getHand(k).getBet());
-							//dealer.collectBet(players.get(i).getHand(k).getInsurance());
 							dealer.dispenseWinnings(players.get(i).getHand(k).getBet(), players.get(i));
 							dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2, players.get(i));
 							roundEarnings += players.get(i).getHand(k).getBet();
 							roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
 						} else {
-							System.out.println("888888888888888");
-							//dealer.collectBet(players.get(i).getHand(k).getBet());
-							//dealer.collectBet(players.get(i).getHand(k).getInsurance());
 							dealer.dispenseWinnings(players.get(i).getHand(k).getInsurance() * 2, players.get(i));
 							roundEarnings += players.get(i).getHand(k).getInsurance() * 2;
 						}
 					} else {
 						if(checkBlackjack(players.get(i).getHand(k))) {
-							//dealer.collectBet(players.get(i).getHand(k).getBet());
 							dealer.dispenseWinnings(players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5), players.get(i));
 							roundEarnings += players.get(i).getHand(k).getBet() + (int)(players.get(i).getHand(k).getBet() * 1.5);
 						} else if(dealer.getUpCards().handTotal() == players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {
-							//dealer.collectBet(players.get(i).getHand(k).getBet());
 							dealer.dispenseWinnings(players.get(i).getHand(k).getBet(), players.get(i));
 							roundEarnings += players.get(i).getHand(k).getBet();
 						} else if(dealer.getUpCards().handTotal() < players.get(i).getHand(k).handTotal() && !bust(players.get(i).getHand(k))) {

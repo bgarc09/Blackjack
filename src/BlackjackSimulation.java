@@ -5,13 +5,13 @@ public class BlackjackSimulation {
 
 	public static void main(String[] args) {
 		ArrayList<Player> players = new ArrayList<Player>();
-		Player a = new Player("Brett", 100);
+		Player a = new Player("Brett", 100, 2);
 		players.add(a);
-		Player b = new Player("Ryan", 100);
+		Player b = new Player("Ryan", 100, 2);
 		players.add(b);
-		Player c = new Player("Luis", 100);
+		Player c = new Player("Luis", 100, 2);
 		players.add(c);
-		Player d = new Player("Judy", 100);
+		Player d = new Player("Judy", 100, 2);
 		players.add(d);
 		House dealer = new House();
 		Blackjack blackjack = new Blackjack(dealer, players, 4);
