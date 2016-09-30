@@ -481,7 +481,6 @@ public class BlackjackTests {
 	
 	@Test
 	public void testDealerHandTotal1() {
-		//no ace
 		House dealer = new House();
 		dealer.setHidden(new Card("Spade", "Five", 5));
 		dealer.setUpCards(new CardHand(new Card("Spade", "Six", 6)));

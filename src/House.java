@@ -80,5 +80,4 @@ public class House {
 	public void setHidden(Card hidden) {
 		this.hidden = hidden;
 	}
-
 }

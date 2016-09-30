@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Player {
 
-	private ArrayList<CardHand> hands; //in order to handle splits
+	private ArrayList<CardHand> hands; 
 	private int money;
 	private int currentBet;
 	private int lastHandWinnings;
@@ -37,12 +37,7 @@ public class Player {
 		}
 		return false;
 	}
-	
-	/**
-	 * 
-	 * @param amount
-	 * @return True if the player has enough money to complete the bet
-	 */
+
 	public boolean bet(int amount, CardHand hand) {
 		if(amount < money) {
 			money -= amount;

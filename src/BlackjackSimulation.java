@@ -15,10 +15,9 @@ public class BlackjackSimulation {
 		players.add(d);
 		House dealer = new House();
 		Blackjack blackjack = new Blackjack(dealer, players, 4);
-		//blackjack.playGameNumRounds(10, 5);
 		blackjack.playGameTilPlayersBroke(5);
 		for(int i = 0; i < blackjack.getPlayers().size(); i++) {
-			System.out.println(blackjack.getPlayers().get(i).getName() + ": " + blackjack.getPlayers().get(i).getMaxMoney());
+			System.out.println(blackjack.getPlayers().get(i).getName() + " Max Money: " + blackjack.getPlayers().get(i).getMaxMoney());
 		}
 	}
 }
